@@ -12,11 +12,11 @@ public class UserRepository {
     private List<User> users = new ArrayList<>();
 
     public UserRepository(){
-        users.add(new User(1L, "Jean Dupont", "jean.dupont@example.com"));
-        users.add(new User(2L, "Marie Curie", "marie.curie@science.org"));
-        users.add(new User(3L, "Victor Hugo", "victor.hugo@literature.fr"));
-        users.add(new User(4L, "Thomas Pesquet", "thomas.space@esa.int"));
-        users.add(new User(5L, "Sophie Germain", "sophie.math@uni.fr"));
+        users.add(new User(1L, "user1", "user.1@email.com"));
+        users.add(new User(2L, "user2", "user.2@email.com"));
+        users.add(new User(3L, "user3", "user.3@email.com"));
+        users.add(new User(4L, "user4", "user.4@email.com"));
+        users.add(new User(5L, "user5", "user.5@email.com"));
     }
 
     public List<User> findAll() {

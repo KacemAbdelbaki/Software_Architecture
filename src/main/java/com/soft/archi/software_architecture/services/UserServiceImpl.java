@@ -1,9 +1,9 @@
 package com.soft.archi.software_architecture.services;
 
 import com.soft.archi.software_architecture.repositories.IUserRepository;
-import com.soft.archi.software_architecture.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.soft.archi.software_architecture.entities.User;
 import java.util.List;
@@ -13,12 +13,12 @@ import java.util.List;
 @Service
 public class UserServiceImpl implements IUserService {
 
-//    private final IUserRepository userRepository;
-    private final UserRepository userRepository;
+    @Autowired
+    private final IUserRepository userRepository;
 
     @Override
     public User getUser(long id) {
-        return userRepository.findById(id);
+        return userRepository.findById(id).get();
     }
 
     @Override

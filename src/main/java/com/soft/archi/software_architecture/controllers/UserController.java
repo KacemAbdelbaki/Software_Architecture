@@ -2,12 +2,16 @@ package com.soft.archi.software_architecture.controllers;
 
 import com.soft.archi.software_architecture.entities.User;
 import com.soft.archi.software_architecture.services.IUserService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @RequestMapping("user")
@@ -17,11 +21,14 @@ public class UserController {
     @Autowired
     private final IUserService userServices;
 
-    List users = new ArrayList();
-
     @PostMapping("/add")
     public User add(@RequestBody User user){
         return userServices.addUser(user);
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public void add(@PathVariable("id") Long id){
+        userServices.deleteUser(userServices.getUser(id));
     }
 
     @GetMapping("/get")

@@ -1,13 +1,11 @@
 package com.soft.archi.software_architecture.entities;
 
-//import jakarta.persistence.*;
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-import org.springframework.stereotype.Component;
-
-import java.io.Serializable;
 
 @Getter
 @Setter
@@ -16,15 +14,12 @@ import java.io.Serializable;
 @NoArgsConstructor
 @FieldDefaults(level= AccessLevel.PRIVATE)
 @Entity
-public class User implements Serializable {
+public class Role {
 
     @Id
     @Schema(hidden = true)
     @GeneratedValue()
     Long id;
-    String nom;
-    String phoneNumber;
 
-    @ManyToOne
-    Role role;
+    String role;
 }

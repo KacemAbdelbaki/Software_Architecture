@@ -5,7 +5,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-import org.springframework.stereotype.Component;
 
 import java.io.Serializable;
 
@@ -16,15 +15,18 @@ import java.io.Serializable;
 @NoArgsConstructor
 @FieldDefaults(level= AccessLevel.PRIVATE)
 @Entity
-public class User implements Serializable {
+public class UserCredentials implements Serializable {
 
     @Id
     @Schema(hidden = true)
     @GeneratedValue()
     Long id;
-    String nom;
-    String phoneNumber;
 
-    @ManyToOne
-    Role role;
+    String username;
+    String email;
+    String password;
+    boolean enabled;
+
+    @OneToOne
+    User user;
 }

@@ -11,8 +11,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -28,24 +30,39 @@ public class UserController {
     private JwtUtils jwtUtils;
 
     @PostMapping("/add")
-    public User add(@RequestBody User user){
-        return userServices.save(user);
+    public ResponseEntity<?> add(@Valid @RequestBody User user){
+        User savedUser = userServices.save(user);
+        return ResponseEntity.status(HttpStatus.CREATED).body(savedUser);
     }
 
     @DeleteMapping("{id}")
-    public ResponseEntity<?> add(@PathVariable("id") Long id){
-        userServices.delete(userServices.findById(id));
-        return ResponseEntity.status(HttpStatus.OK).build();
+    public ResponseEntity<?> deleteUser(@PathVariable("id") Long id){
+        userServices.delete(id);
+        Map<String, String> response = new HashMap<>();
+        response.put("message", "Utilisateur supprimé avec succès");
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping()
-    public List<User> getUsers(){
-        return userServices.findAll();
+    public ResponseEntity<List<User>> getUsers(){
+        List<User> users = userServices.findAll();
+        return ResponseEntity.ok(users);
     }
 
     @GetMapping("/{id}")
-    public User getUser(@PathVariable("id") Integer id){
-        return userServices.findById(id);
+    public ResponseEntity<User> getUser(@PathVariable("id") Long id){
+        User user = userServices.findById(id);
+        return ResponseEntity.ok(user);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updateUser(@PathVariable("id") Long id, @Valid @RequestBody User user){
+        User existingUser = userServices.findById(id);
+        existingUser.setNom(user.getNom());
+        existingUser.setPhoneNumber(user.getPhoneNumber());
+        existingUser.setRole(user.getRole());
+        User updatedUser = userServices.save(existingUser);
+        return ResponseEntity.ok(updatedUser);
     }
 
     @GetMapping("/jwt/{jwt}")

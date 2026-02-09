@@ -44,6 +44,11 @@ public class RoleServiceImpl implements IRoleService {
     }
 
     @Override
+    public Role findByRole(String role) {
+        return roleRepository.findByRole(role);
+    }
+
+    @Override
     public void delete(Long id) {
         log.info("Suppression du rôle avec l'ID: {}", id);
         Role role = findById(id);

@@ -6,6 +6,10 @@ import com.soft.archi.software_architecture.repositories.IUserCredentialsReposit
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,7 +18,7 @@ import java.util.NoSuchElementException;
 @Slf4j
 @RequiredArgsConstructor
 @Service
-public class UserCredentialsServiceImpl implements IUserCredentialsService {
+public class UserCredentialsServiceImpl implements IUserCredentialsService, UserDetailsService {
 
     @Autowired
     private final IUserCredentialsRepository userCredentialsRepository;
@@ -24,6 +28,39 @@ public class UserCredentialsServiceImpl implements IUserCredentialsService {
         log.info("Recherche des credentials avec l'ID: {}", id);
         return userCredentialsRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("Credentials avec l'ID " + id + " non trouvés"));
+    }
+
+    @Override
+    public UserCredentials findByUsername(String username) {
+        UserCredentials credentials = userCredentialsRepository.findByUsername(username);
+        return applyAuthorities(credentials);
+    }
+
+    @Override
+    public UserCredentials findByEmail(String email) {
+        UserCredentials credentials = userCredentialsRepository.findByEmail(email);
+        return applyAuthorities(credentials);
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        UserCredentials credentials = userCredentialsRepository.findByEmail(email);
+        if (credentials == null) {
+            throw new UsernameNotFoundException("No user found with email: " + email);
+        }
+        return applyAuthorities(credentials);
+    }
+
+    private UserCredentials applyAuthorities(UserCredentials credentials) {
+        if (credentials == null) {
+            return null;
+        }
+        if (credentials.getRole() != null && credentials.getRole().getRole() != null) {
+            credentials.setAuthorities(List.of(new SimpleGrantedAuthority(credentials.getRole().getRole())));
+        } else {
+            credentials.setAuthorities(List.of());
+        }
+        return credentials;
     }
 
     @Override

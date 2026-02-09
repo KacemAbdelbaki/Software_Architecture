@@ -32,7 +32,8 @@ public class User implements Serializable {
     @Pattern(regexp = "^[+]?[0-9]{8,15}$", message = "Format de numéro de téléphone invalide")
     String phoneNumber;
 
-    @ManyToOne
-    @NotNull(message = "Le rôle est obligatoire")
-    Role role;
+    public User(String nom, String phoneNumber) {
+        this.nom = nom;
+        this.phoneNumber = phoneNumber;
+    }
 }

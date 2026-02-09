@@ -9,6 +9,7 @@ public interface IRoleService {
     Role save(Role role);
     List<Role> findAll();
     Role findById(Long id);
+    Role findByRole(String role);
     void delete(Long id);
     void delete(Role role);
 }

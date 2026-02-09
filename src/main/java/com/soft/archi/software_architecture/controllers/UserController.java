@@ -60,7 +60,6 @@ public class UserController {
         User existingUser = userServices.findById(id);
         existingUser.setNom(user.getNom());
         existingUser.setPhoneNumber(user.getPhoneNumber());
-        existingUser.setRole(user.getRole());
         User updatedUser = userServices.save(existingUser);
         return ResponseEntity.ok(updatedUser);
     }
@@ -73,5 +72,10 @@ public class UserController {
     @GetMapping("/jwt/validate/{jwt}")
     public ResponseEntity<?> validateJwt(@PathVariable("jwt") String jwt){
         return jwtUtils.validateJwtToken(jwt) ? ResponseEntity.ok().build() : ResponseEntity.status(400).build();
+    }
+
+    @GetMapping("/jwt/body/{jwt}")
+    public ResponseEntity<?> getJwtBody(@PathVariable("jwt") String jwt){
+        return ResponseEntity.ok(jwtUtils.getBodyFromJwtToken(jwt));
     }
 }

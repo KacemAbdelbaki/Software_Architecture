@@ -31,7 +31,7 @@ public class JwtUtils {
     @Value("${app.jwtExpirationMs}")
     private int jwtExpirationMs;
 
-    @Value("app.jwtCookieName")
+    @Value("${app.jwtCookieName}")
     String jwtCookieName;
 
     private Key key() {
@@ -61,14 +61,12 @@ public class JwtUtils {
     }
 
     public ResponseCookie generateJwtCookie(UserCredentials userPrincipal) {
-        String jwt = generateJwtToken(userPrincipal.getUsername());
-        ResponseCookie cookie = ResponseCookie.from(jwtCookieName, jwt).path("/api").maxAge(24 * 60 * 60).httpOnly(true).build();
-        return cookie;
+        String jwt = generateJwtToken(userPrincipal.getEmail());
+        return ResponseCookie.from(jwtCookieName, jwt).path("/soft/archi").maxAge(24 * 60 * 60).httpOnly(true).build();
     }
 
     public ResponseCookie getCleanJwtCookie() {
-        ResponseCookie cookie = ResponseCookie.from(jwtCookieName, null).path("/api").build();
-        return cookie;
+        return ResponseCookie.from(jwtCookieName, null).path("/soft/archi").build();
     }
 
     public boolean validateJwtToken(String authToken) {

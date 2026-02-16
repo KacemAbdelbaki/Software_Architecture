@@ -56,7 +56,7 @@ public class UserCredentialsServiceImpl implements IUserCredentialsService, User
             return null;
         }
         if (credentials.getRole() != null && credentials.getRole().getRole() != null) {
-            credentials.setAuthorities(List.of(new SimpleGrantedAuthority(credentials.getRole().getRole())));
+            credentials.setAuthorities(List.of(new SimpleGrantedAuthority("ROLE_" + credentials.getRole().getRole())));
         } else {
             credentials.setAuthorities(List.of());
         }

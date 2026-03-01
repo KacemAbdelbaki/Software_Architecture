@@ -1,6 +1,5 @@
 package com.soft.archi.software_architecture.controllers;
 
-import com.soft.archi.software_architecture.entities.Role;
 import com.soft.archi.software_architecture.entities.User;
 import com.soft.archi.software_architecture.entities.UserCredentials;
 import com.soft.archi.software_architecture.security.jwt.JwtUtils;
@@ -8,7 +7,7 @@ import com.soft.archi.software_architecture.security.jwt.payloads.Requests.Login
 import com.soft.archi.software_architecture.security.jwt.payloads.Requests.SignupRequest;
 import com.soft.archi.software_architecture.security.jwt.payloads.Responses.MessageResponse;
 import com.soft.archi.software_architecture.security.jwt.payloads.Responses.UserInfoResponse;
-import com.soft.archi.software_architecture.services.IRoleService;
+import com.soft.archi.software_architecture.services.IAuthorizationService;
 import com.soft.archi.software_architecture.services.IUserCredentialsService;
 import com.soft.archi.software_architecture.services.IUserService;
 import jakarta.validation.Valid;
@@ -46,7 +45,7 @@ public class UserCredentialsController {
     @Autowired
     final private IUserService userService;
     @Autowired
-    final private IRoleService roleService;
+    final private IAuthorizationService authorizationService;
 
 
 //    @PostMapping("/add")
@@ -136,16 +135,8 @@ public class UserCredentialsController {
                 true
                 );
 
-        Role strRole = signUpRequest.getRole();
-        Role role = new Role();
-
-        if (strRole == null) {
-            role = roleService.findByRole("GUEST");
-        } else {
-            role = roleService.findByRole(strRole.getRole());
-        }
-
-        userCredentials.setRole(role);
+        // Note: Authorization is now determined by the AuthorizationService, not by roles
+        // The service decides permissions based on user email/credentials
         User user = new User("kacem", "0666361642");
         user = userService.save(user);
         userCredentials.setUser(user);
@@ -168,13 +159,13 @@ public class UserCredentialsController {
     }
 
     @GetMapping("/user")
-    @PreAuthorize("hasRole('USER')")
+    @PreAuthorize("@authService.isUser()")
     public String userAccess() {
         return "User Content.";
     }
 
     @GetMapping("/admin")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("@authService.isAdmin()")
     public String adminAccess() {
         return "Admin Content.";
     }

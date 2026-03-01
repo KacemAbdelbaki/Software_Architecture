@@ -27,10 +27,6 @@ public class UserCredentials implements Serializable, UserDetails {
     @GeneratedValue()
     Long id;
 
-    @ManyToOne
-    @NotNull(message = "Le rôle est obligatoire")
-    Role role;
-
     @NotBlank(message = "Le nom d'utilisateur est obligatoire")
     @Size(min = 3, max = 50, message = "Le nom d'utilisateur doit contenir entre 3 et 50 caractères")
     @Column(unique = true)

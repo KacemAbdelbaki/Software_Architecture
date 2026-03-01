@@ -6,7 +6,6 @@ import com.soft.archi.software_architecture.repositories.IUserCredentialsReposit
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -55,11 +54,10 @@ public class UserCredentialsServiceImpl implements IUserCredentialsService, User
         if (credentials == null) {
             return null;
         }
-        if (credentials.getRole() != null && credentials.getRole().getRole() != null) {
-            credentials.setAuthorities(List.of(new SimpleGrantedAuthority("ROLE_" + credentials.getRole().getRole())));
-        } else {
-            credentials.setAuthorities(List.of());
-        }
+        // Authorities are no longer based on roles
+        // The AuthorizationService now determines permissions based on the user's credentials
+        // We still set an empty list for compatibility with Spring Security's UserDetails
+        credentials.setAuthorities(List.of());
         return credentials;
     }
 
